@@ -8,7 +8,7 @@ const HeroSchema = new Schema({
   lastName: { type: String, required: true, min: 3, max: 60 },
   heroName: { type: String, required: true, min: 3, max: 60 },
   age: { type: Number, required: true, min: 3, max: 60 },
-  genre: { type: String, required: true },
+  genre: { type: String, required: true, enum: ['niño', 'niña'] },
   created_at: { type: Date, default: Date.now },
   updated_at: Date
 });
