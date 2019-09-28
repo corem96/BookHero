@@ -6,7 +6,10 @@ const path = require('path');
 const createError = require('http-errors');
 const cors = require('cors');
 const config = require('./config');
-const mongooseLoader = require('./config/mongooseLoader');
+
+// Router
+const home = require('./routes/home');
+// const mongooseLoader = require('./config/mongooseLoader');
 
 // view engine setup
 // app.set('views', path.join(__dirname, 'views'));
@@ -21,8 +24,10 @@ app.use(express.urlencoded({ extended: false }));
 // app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-const mongoDbConn = mongooseLoader.getConnection();
-mongoDbConn.then(ans => console.log(ans));
+// const mongoDbConn = mongooseLoader.getConnection();
+// mongoDbConn.then(ans => console.log(ans));
+
+app.use('/', home);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => next(createError(404)));
