@@ -1,6 +1,7 @@
 /*jshint esversion: 6 */
 const mongoose = require('mongoose'),
   Schema = mongoose.Schema;
+const Joi = require('joi');
 
 const HeroSchema = new Schema({
   // id: { type: String, index: { unique: true } },
@@ -15,8 +16,19 @@ const HeroSchema = new Schema({
 
 HeroSchema.virtual('uniqueId')
   .get(() => 
-    // this.filename.replace(path.extname(this.filename), '')
     Math.floor((Math.random() * 100) + 1)
   );
 
-module.exports = mongoose.model('Hero', HeroSchema);
+function validateHero(hero) {
+  const schema = {
+    name: Joi.string().required().min(3).max(50),
+    lastName: Joi.string().required().min(3).max(50),
+    heroName: Joi.string().required().min(3).max(50),
+    age: Joi.number().required().min(3).max(10),
+    genre: Joi.string().required().min(4).max(5)
+  }
+  return Joi.validate(hero, schema);
+}
+
+exports.Hero = mongoose.model('Hero', HeroSchema);
+exports.validate = validateHero;
