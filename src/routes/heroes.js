@@ -1,16 +1,29 @@
 const { Hero, validate } = require('../models/hero');
-const mongooseLoader = require('../config/mongooseLoader');
 const express = require('express');
 const router = express.Router();
 
-const mongoDbConn = mongooseLoader.getConnection();
-mongoDbConn
-  .then(ans => console.log(ans))
-  .catch(err => console.log(err));
+// GET heroes listing
+router.get('/', async (req, res, next) => {
+  const heroes = await Hero.find();
+  res.json(heroes || []);
+});
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+// POST hero
+router.post('/', async (req,res) => {
+  const { error } = validate(req.body);
+  if (error) { return res.status(400).send(error.details[0].message); }
+  
+  let hero = new Hero({
+    name: req.body.name,
+    lastName: req.body.lastName,
+    heroName: req.body.heroName,
+    age: req.body.age,
+    genre: req.body.genre
+  });
+  
+  await hero.save();
+
+  res.status(201).json(hero);
 });
 
 module.exports = router;
