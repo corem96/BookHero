@@ -8,6 +8,14 @@ router.get('/', async (req, res, next) => {
   res.json(heroes || []);
 });
 
+// GET single hero
+router.get('/:id', async (req,res) => {
+  const hero = Hero.findById(req.params.id);
+  if (!hero) return status(404).send(`El heroe número: ${id} no existe`);
+
+  return res.status(200).send(hero);
+});
+
 // POST hero
 router.post('/', async (req,res) => {
   const { error } = validate(req.body);
@@ -24,6 +32,16 @@ router.post('/', async (req,res) => {
   await hero.save();
 
   res.status(201).json(hero);
+});
+
+// DELETE hero
+router.delete('/:id', async (req,res) => {
+  const id = req.params.id;
+  const hero = await Hero.findByIdAndRemove(id);
+  if (!hero)
+    return res.status(404).send(`El heroe número: ${id} no existe`);
+
+  res.send(hero);
 });
 
 module.exports = router;
