@@ -1,11 +1,12 @@
+/*jshint esversion:6 */
 const { Hero, validate } = require('../models/hero');
 const express = require('express');
 const router = express.Router();
 
 // GET heroes listing
-router.get('/', async (req, res, next) => {
+router.get('/', async (req,res) => {
   const heroes = await Hero.find();
-  res.json(heroes || []);
+  res.json(heroes);
 });
 
 // GET single hero
@@ -31,7 +32,7 @@ router.post('/', async (req,res) => {
   
   await hero.save();
 
-  res.status(201).json(hero);
+  res.send(hero);
 });
 
 // DELETE hero
