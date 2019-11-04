@@ -6,7 +6,10 @@ const router = express.Router();
 // GET heroes listing
 router.get('/', async (req,res) => {
   const heroes = await Hero.find();
-  res.json(heroes);
+  console.log(heroes);
+  // if (!heroes) return res.status(404).send(`No se encontró ningun heroe :(`);
+
+  res.status(200).json('heroes');
 });
 
 // GET single hero
@@ -14,7 +17,7 @@ router.get('/:id', async (req,res) => {
   const hero = Hero.findById(req.params.id);
   if (!hero) return status(404).send(`El heroe número: ${id} no existe`);
 
-  return res.status(200).send(hero);
+  res.status(200).send(hero);
 });
 
 // POST hero
@@ -30,7 +33,26 @@ router.post('/', async (req,res) => {
     genre: req.body.genre
   });
   
-  await hero.save();
+  hero = await hero.save();
+
+  res.send(hero);
+});
+
+// PUT hero
+router.put('/:id', async (req,res) => {
+  const { error } = validate(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+
+  const hero = await Hero.findByIdAndUpdate(req.params.id,
+      {
+        name: req.body.name,
+        lastName: req.body.lastName,
+        heroName: req.body.heroName,
+        age: req.body.age,
+        genre: req.body.genre
+      }, {new: true});
+
+  if (!hero) return res.status(404).send('El heroe no se encontró y no pudo actualizarse');
 
   res.send(hero);
 });

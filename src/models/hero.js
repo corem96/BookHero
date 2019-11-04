@@ -1,6 +1,6 @@
 /*jshint esversion: 6 */
 const mongoose = require('mongoose'),
-  Schema = mongoose.Schema;
+      Schema = mongoose.Schema;
 const Joi = require('joi');
 
 // HeroSchema.virtual('uniqueId')
@@ -15,7 +15,7 @@ function validateHero(hero) {
     heroName: Joi.string().required().min(3).max(50),
     age: Joi.number().required().min(3).max(10),
     genre: Joi.string().required().min(4).max(5)
-  }
+  };
   return Joi.validate(hero, schema);
 }
 
