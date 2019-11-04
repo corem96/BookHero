@@ -25,17 +25,17 @@ app.use(express.urlencoded({ extended: false }));
 // app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-const mongoDbConn = mongooseLoader.getConnection();
-mongoDbConn.then(ans => console.log('connected to mongo...'));
+const mongoDb = mongooseLoader.getConnection();
+mongoDb.then(ans => console.log('connected to mongo...'));
 
 app.use('/', home);
-app.use('/heroes', heroes);
+app.use('/api/heroes', heroes);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => next(createError(404)));
 
 // error handler
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
