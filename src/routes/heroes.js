@@ -1,7 +1,10 @@
 /*jshint esversion:6 */
 const { Hero, validate } = require('../models/hero');
+const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
+
+
 
 // GET heroes listing
 router.get('/', async (req,res) => {
@@ -22,20 +25,28 @@ router.get('/:id', async (req,res) => {
 
 // POST hero
 router.post('/', async (req,res) => {
+  console.log(mongoose.connection.readyState);
+
   const { error } = validate(req.body);
   if (error) { return res.status(400).send(error.details[0].message); }
-  
-  let hero = new Hero({
-    name: req.body.name,
-    lastName: req.body.lastName,
-    heroName: req.body.heroName,
-    age: req.body.age,
-    genre: req.body.genre
-  });
-  
-  hero = await hero.save();
 
-  res.send(hero);
+  try {
+    let hero = new Hero({
+      name: req.body.name,
+      lastName: req.body.lastName,
+      heroName: req.body.heroName,
+      age: req.body.age,
+      genre: req.body.genre
+    });
+
+    const savedHero = await hero.save();
+    console.log(savedHero);
+
+    res.send(savedHero);
+  } catch (err) {
+    console.log(`error: ${err}`);
+    res.status(500).send(err);
+  }
 });
 
 // PUT hero
