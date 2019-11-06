@@ -25,8 +25,15 @@ app.use(express.urlencoded({ extended: false }));
 // app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-const mongoDb = mongooseLoader.getConnection();
-mongoDb.then(ans => console.log('connected to mongo...'));
+try {
+  const mongoDb = mongooseLoader.getConnection();
+  console.log(mongoDb);
+  // mongoDb.on('connected', () => {
+  //   console.log(`mongoose successfully connected`);
+  // });
+} catch(err) {
+  console.log(err);
+}
 
 app.use('/', home);
 app.use('/api/heroes', heroes);
