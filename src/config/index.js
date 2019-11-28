@@ -1,6 +1,6 @@
 /*jshint esversion: 6*/
 const path = require('path');
-require('dotenv').config({path: path.join(__dirname, '../', '.env')});
+const dotenv =require('dotenv').config({path: path.join(__dirname, '../../', '.env')});
 
 module.exports = {
   app: {
